@@ -1,0 +1,20 @@
+{% load static %}
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b0d10"><title>{% block title %}CINEMORA — kino olami{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'media_api/styles.css' %}?v=cinemora-rating-2">
+</head>
+<body data-page="{% block page %}{% endblock %}" {% block body_data %}{% endblock %}>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar"><a class="brand" href="/" aria-label="Cinemora bosh sahifa"><span class="brand-mark">C</span><span>CINE<span class="brand-light">MORA</span></span></a>
+    <nav class="main-nav"><a class="nav-link {% block home_active %}{% endblock %}" href="/">Bosh sahifa</a><a class="nav-link" href="/#movies">Kinolar</a><a class="nav-link" href="/#categories">Janrlar</a></nav>
+    <div class="top-actions"><label class="search-box"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 4 4"></path></svg><input id="site-search" type="search" placeholder="Kino qidirish..." autocomplete="off"><kbd>/</kbd></label></div>
+  </header>
+  <main>{% block content %}{% endblock %}</main>
+  <footer class="footer"><a class="brand footer-brand" href="/"><span class="brand-mark">C</span><span>CINE<span class="brand-light">MORA</span></span></a><span>Kino kechangiz maroqli o‘tsin.</span><span>© 2025 Cinemora</span></footer>
+  <script src="{% static 'media_api/app.js' %}?v=cinemora-rating-2" defer></script>
+</body></html>

@@ -18,8 +18,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from media_api.views import home_page, search_page, watch_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', home_page, name='home-page'),
+    path('search/', search_page, name='search-page'),
+    path('watch/<slug:slug>/', watch_page, name='watch-page'),
     path('api/', include('media_api.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
