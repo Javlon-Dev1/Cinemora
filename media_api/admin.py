@@ -12,8 +12,13 @@ admin.site.register(Category)
 class MovieAdmin(admin.ModelAdmin):
     filter_horizontal = ('genres', 'country')
     list_display = ('title', 'category', 'release_year', 'views_count', 'is_published')
-    readonly_fields = ('views_count',)
+    readonly_fields = ('views_count', 'duration')
     exclude = ('imdb_rating',)
+    fields = (
+        'title', 'slug', 'description', 'category', 'release_year', 'duration',
+        'poster', 'video_url', 'video_file', 'trailer_url', 'genres', 'country',
+        'views_count', 'is_published',
+    )
 
 
 @admin.register(MovieRating)

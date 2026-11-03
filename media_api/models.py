@@ -1,7 +1,12 @@
+from math import ceil
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import FileExtensionValidator, MinValueValidator, MaxValueValidator
 from django.db.models import Q
+from django.core.exceptions import ValidationError
+from mutagen import MutagenError
+from mutagen.mp4 import MP4
 
 from django.utils.text import slugify
 
@@ -53,9 +58,15 @@ class Movie(models.Model):
     description = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     release_year = models.PositiveSmallIntegerField(db_index=True)
-    duration = models.PositiveSmallIntegerField(help_text='daqiqada')
+    duration = models.PositiveSmallIntegerField(blank=True, null=True, help_text='daqiqada')
     poster = models.ImageField(upload_to='posters/')
-    video_url = models.URLField()
+    video_url = models.URLField(blank=True)
+    video_file = models.FileField(
+        upload_to='videos/',
+        blank=True,
+        null=True,
+        validators=[FileExtensionValidator(allowed_extensions=['mp4'])],
+    )
     trailer_url = models.URLField()
     genres = models.ManyToManyField(Genre, related_name='movies')
     country = models.ManyToManyField(Country, related_name='movies')
@@ -72,6 +83,24 @@ class Movie(models.Model):
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+
+    def clean(self):
+        super().clean()
+        if not self.video_file and not self.video_url:
+            raise ValidationError('Kino uchun video fayl yoki video URL kiriting.')
+        if self.video_file:
+            video = self.video_file.file
+            position = video.tell()
+            try:
+                video.seek(0)
+                duration_seconds = MP4(video).info.length
+                self.duration = max(1, ceil(duration_seconds / 60))
+            except (MutagenError, OSError, ValueError, TypeError, AttributeError) as exc:
+                raise ValidationError({
+                    'video_file': 'Video davomiyligini aniqlab bo‘lmadi. MP4 faylni tekshiring.',
+                }) from exc
+            finally:
+                video.seek(position)
 
     def __str__(self):
         return self.title

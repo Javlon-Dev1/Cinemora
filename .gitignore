@@ -5,3 +5,12 @@ __pycache__
 venv/
 db.sqlite3
 /media
+staticfiles/
+.env
+.env.*
+!.env.example
+!.env.production.example
+*.py[cod]
+__pycache__/
+.pytest_cache/
+.coverage

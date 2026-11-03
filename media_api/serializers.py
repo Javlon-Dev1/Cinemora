@@ -31,6 +31,7 @@ class MovieSerializer(serializers.ModelSerializer):
     )
     average_rating = serializers.SerializerMethodField()
     rating_count = serializers.SerializerMethodField()
+    video_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Movie
@@ -51,3 +52,10 @@ class MovieSerializer(serializers.ModelSerializer):
     def get_rating_count(self, obj):
         value = getattr(obj, 'ratings_count', None)
         return value if value is not None else obj.ratings.count()
+
+    def get_video_url(self, obj):
+        if obj.video_file:
+            request = self.context.get('request')
+            file_url = obj.video_file.url
+            return request.build_absolute_uri(file_url) if request else file_url
+        return obj.video_url

@@ -26,4 +26,7 @@ urlpatterns = [
     path('search/', search_page, name='search-page'),
     path('watch/<slug:slug>/', watch_page, name='watch-page'),
     path('api/', include('media_api.urls'))
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

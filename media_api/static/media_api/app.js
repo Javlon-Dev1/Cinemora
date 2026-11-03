@@ -5,7 +5,7 @@
   async function postJson(url, body) { const response=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(body)});if(!response.ok)throw new Error(`HTTP ${response.status}`);return response.json(); }
   const esc = (value = '') => String(value).replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const posterUrl = (value) => { if (!value) return ''; if (/^https?:\/\//i.test(value)) return value; return `${location.origin}${value.startsWith('/') ? '' : '/'}${value}`; };
-  const minutes = (n) => { const h=Math.floor((Number(n)||0)/60), m=(Number(n)||0)%60; return h ? `${h} soat ${m} daq.` : `${m} daq.`; };
+  const minutes = (n) => { if(n===null||n===undefined||n==='')return 'Davomiyligi noma’lum'; const h=Math.floor((Number(n)||0)/60), m=(Number(n)||0)%60; return h ? `${h} soat ${m} daq.` : `${m} daq.`; };
   const rating = (value) => value ? Number(value).toFixed(1) : '—';
   const movieLink = (movie) => `/watch/${encodeURIComponent(movie.slug)}/`;
   const genres = (movie) => Array.isArray(movie.genres) ? movie.genres.map((g) => typeof g === 'object' ? g.name : g) : [];
